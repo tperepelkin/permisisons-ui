@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+      "outDir": "./public/js/",
+      "noImplicitAny": true,
+      "module": "ESNext",
+      "moduleResolution": "node",
+      "target": "es6",
+      "jsx": "react",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "allowSyntheticDefaultImports": true,
+      "lib":[
+          "ESNext", "dom"
+      ]
+    },
+    "ts-node": {
+      "module": "ESNext",
+    },
+    "include": [
+        "src/client/**/*",
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+
+    ]
+  }

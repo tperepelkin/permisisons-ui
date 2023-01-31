@@ -1,0 +1,30 @@
+
+// import { Sequelize } from 'sequelize-typescript';
+// import database from '../database';
+// import Adsb from '../models/ads_b';
+
+
+// export type TRepo = {
+//     getAdsb(): any;
+// }
+
+// class SQLRepo {
+//     repo: Sequelize | null = null;
+
+//     connect(): TRepo {
+//         this.connectDb();
+//     }
+
+//     connectDb(): any {
+//         this.repo = database;
+//         console.log('Add model', Adsb);
+//         this.repo.addModels([Adsb]);
+//         this.repo.sync();
+//     }
+
+//     getAdsb() {
+//         return [];
+//     }
+// }
+
+// export const sqlRepo = new SQLRepo().connect();

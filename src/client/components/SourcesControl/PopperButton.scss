@@ -1,0 +1,17 @@
+#sources-button {
+    position: absolute;
+    border-radius: 5px;
+    top: 12px;
+    right: 12px;
+    background-color: #fff;
+    border: 2px solid #b2aeae;
+
+    .MuiButtonBase-root {
+        padding: 2px;
+    }
+}
+
+#sources-popper {
+    top: -30px !important;
+    right: -20px !important;
+}

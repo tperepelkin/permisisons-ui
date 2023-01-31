@@ -1,0 +1,58 @@
+{
+	"folders": [
+		{
+			"path": "../../../../asterix"
+		},
+		{
+			"path": "../../../../bvs"
+		},
+		{
+			"path": "../../../../mlat"
+		},
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../webMonitoring-old"
+		},
+		{
+			"path": "../../../../probe/my-project"
+		},
+		{
+			"path": "../../../../old/webMonitoring-old"
+		}
+	],
+	"settings": {
+		"vscode-mysql.enableTelemetry": false,
+		"sqltools.connections": [
+			{
+				"mysqlOptions": {
+					"authProtocol": "default"
+				},
+				"previewLimit": 50,
+				"server": "127.0.0.1",
+				"port": 3306,
+				"driver": "MySQL",
+				"name": "local database",
+				"database": "testDB1",
+				"username": "testUser2",
+				"connectionTimeout": 1500,
+				"password": "password"
+			},
+			{
+				"mysqlOptions": {
+					"authProtocol": "default"
+				},
+				"previewLimit": 50,
+				"server": "127.0.0.1",
+				"port": 3306,
+				"driver": "MySQL",
+				"name": "local bvs",
+				"database": "BVS",
+				"username": "bvs",
+				"password": "bvsbvsbvs",
+				"connectionTimeout": 2000
+			}
+		]
+	}
+}
