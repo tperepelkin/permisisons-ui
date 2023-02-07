@@ -6,3 +6,4 @@ dist/
 public/js/app.js
 public/js/assets
 #resources/files/
+node_modules

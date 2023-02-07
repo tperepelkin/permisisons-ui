@@ -8,7 +8,9 @@ import TableRow from '@mui/material/TableRow';
 import Title from './Title';
 import { EditOrganizationDialog } from './EditOrganizationDialog';
 import * as moment from 'moment';
-import { styled } from '@mui/material';
+import { styled, Tooltip } from '@mui/material';
+import ClearIcon from '@mui/icons-material/Clear';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 // Generate Order Data
 function createData(
@@ -55,6 +57,10 @@ const StyledTable = styled(Table)({
   },
 });
 
+const StyledClearIcon = styled(ClearIcon)({
+  'fill': '#ff0000',
+});
+
 export default function Organizations() {
   const [open, setOpen] = React.useState(false);
 
@@ -93,7 +99,14 @@ export default function Organizations() {
               <TableCell>{row.inn}</TableCell>
               <TableCell>{row.ogrn}</TableCell>
               <TableCell>{moment(row.ogrnCreateDate).format('dd.mm.YYYY')}</TableCell>
-              <TableCell align="right"></TableCell>
+              <TableCell align="right">
+              <Tooltip title="Редактировать" sx={{ mr: 1 }}>
+                  <ModeEditIcon />
+                </Tooltip>
+                <Tooltip title="Удалить">
+                  <StyledClearIcon />
+                </Tooltip>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

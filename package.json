@@ -47,6 +47,8 @@
     "leaflet-draw": "^1.0.4",
     "leaflet-fullscreen": "^1.0.2",
     "leaflet-geosearch": "^3.7.0",
+    "material-react-table": "^1.6.5",
+    "material-table": "^2.0.3",
     "md5-file": "^5.0.0",
     "mui-image": "^1.0.7",
     "mysql2": "^2.3.3",
