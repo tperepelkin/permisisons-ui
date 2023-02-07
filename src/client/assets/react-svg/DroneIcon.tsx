@@ -5,7 +5,7 @@ const DroneIcon: React.FC<IconParams> = ({ fillColor = 'rgba(0, 0, 0, 0.54)', })
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            enable-background="new 0 0 512 512"
+            enableBackground="new 0 0 512 512"
             width="30"
             height="33"
             style={{ position: 'relative', left: '-3px', }}

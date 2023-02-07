@@ -6,7 +6,8 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Title from './Title';
-import { styled } from '@mui/material';
+import { List, styled } from '@mui/material';
+import { EditUserDialog } from './EditUserDialog';
 
 // Generate Order Data
 function createData(
@@ -78,7 +79,23 @@ const StyledTable = styled(Table)({
   },
 });
 
-export default function Users() {
+export interface SimpleDialogProps {
+  open: boolean;
+  onClose: () => void;
+}
+
+ export default function Users() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleNavItemClick = (id: number) => {
+    console.log('Clicked on id', id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
       <Title>Список зарегистрированных пользователей ВС</Title>
@@ -96,7 +113,7 @@ export default function Users() {
         </TableHead>
         <TableBody>
           {rows.map((row) => (
-            <TableRow key={row.id}>
+            <TableRow key={row.id} onClick={() => handleNavItemClick(row.id)}>
               <TableCell sx={{ display: 'none' }}>{row.id}</TableCell>
               <TableCell>{row.lastName}</TableCell>
               <TableCell>{row.firstName}</TableCell>
@@ -111,6 +128,11 @@ export default function Users() {
       <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
         Смотреть больше
       </Link>
+
+      <EditUserDialog
+        open={open}
+        onClose={handleClose}
+      />
     </>
   );
 }

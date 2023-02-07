@@ -10,8 +10,8 @@ import { AircraftRegistry, UnmannedAircraftRegistry, PermissionsIvpRegistry, Per
 // import { mapSlice } from './store/slices/map.slice';
 
 import './App.scss';
-import UsersRegistry from './pages/tables/UsersRegistry';
-import LegalEntitysRegistry from './pages/tables/LegalEntitysRegistry';
+import UsersCard from './pages/tables/UserCard';
+import OrganizationCard from './pages/tables/OrganizationCard';
 import Dashboard from './components/Dashboard/Dashboard';
 
 interface AppProps { }
@@ -33,7 +33,7 @@ const App = (props: AppProps) => {
 			</AppBar> */}
 			<Routes>
 				<Route path="/dashboard" element={<Dashboard />} />
-				{/* <Route path="/legal-entities-registry" element={<LegalEntitysRegistry />} />
+				{/* <Route path="/legal-entities-registry" element={<OrganizationsRegistry />} />
 				<Route path="/users-registry" element={<UsersRegistry />} />
 				<Route path="/aircraft-registry" element={<AircraftRegistry />} />
 				<Route path="/unmanned-aircrafts-registry" element={<UnmannedAircraftRegistry />} />
