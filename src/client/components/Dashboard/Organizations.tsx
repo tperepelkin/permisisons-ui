@@ -1,123 +1,208 @@
-import * as React from 'react';
-import Link from '@mui/material/Link';
+import React, { FC, useCallback, useMemo, useState, MouseEvent } from 'react';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Title from './Title';
-import { EditOrganizationDialog } from './EditOrganizationDialog';
-import * as moment from 'moment';
-import { styled, Tooltip } from '@mui/material';
+import { Box, Button, IconButton, styled, TableContainer, Tooltip } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
-import ModeEditIcon from '@mui/icons-material/ModeEdit';
+import AddIcon from '@mui/icons-material/Add';
+import CachedIcon from '@mui/icons-material/Cached';
+import MaterialReactTable, { MaterialReactTableProps, MRT_Cell, MRT_ColumnDef, MRT_Row } from 'material-react-table';
+import { organizationSampleList, validateRequired } from './sample-data';
+import { MRT_Localization_RU } from 'material-react-table/locales/ru';
+import EditIcon from '@mui/icons-material/Edit';
+import { useConfirmDialog } from '../ConfirmDialog/useConfirmDialog';
+import { EditRowDialog } from './EditPersonDialog';
 
-// Generate Order Data
-function createData(
-  id: number,
-  name: string,
-  inn: string,
-  ogrn: string,
-  ogrnCreateDate: Date
-) {
-  return { id, name, inn, ogrn, ogrnCreateDate };
+export interface Organization {
+  id: number;
+  name: string;
+  inn: string;
+  ogrn: string;
+  ogrnCreateDate: string;
 }
 
-const rows = [
-  createData(
-    0,
-    'АО "ФК "Зенит"',
-    '7812005788',
-    '1027810329095',
-    moment('20.12.2002', 'YYYY-mm-dd').toDate()
-  ),
-  createData(
-    1,
-    'БФ ФНБУ "Иорспасслужба"',
-    '7722005788',
-    '2222810329095',
-    moment('20.12.2020', 'YYYY-mm-dd').toDate()
-  ),
-  createData(
-    2,
-    'Войсковая часть 09436',
-    '7112235788',
-    '1127810329095',
-    moment('20.12.1992', 'YYYY-mm-dd').toDate()
-  ),
-];
-
-const StyledTable = styled(Table)({
-  'tbody': {
-    'tr': {
-      '&:hover': {
-        background: '#e9f3fd',
-      },
-    },
-  },
-});
-
-const StyledClearIcon = styled(ClearIcon)({
-  'fill': '#ff0000',
-});
-
 export default function Organizations() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [tableData, setTableData] = useState<Organization[]>(() => organizationSampleList);
+  const [validationErrors, setValidationErrors] = useState<{
+    [cellId: string]: string;
+  }>({});
+  const [editRow, setEditRow] = useState<Organization | null>(null);
+  const confirm = useConfirmDialog();
 
-  const handleNavItemClick = (id: number) => {
-    console.log('Clicked on id', id);
-    setOpen(true);
+  const getCommonEditTextFieldProps = useCallback(
+    (
+      cell: MRT_Cell<Organization>,
+    ): MRT_ColumnDef<Organization>['muiTableBodyCellEditTextFieldProps'] => {
+      return {
+        error: !!validationErrors[cell.id],
+        helperText: validationErrors[cell.id],
+        onBlur: (event) => {
+          const isValid = validateRequired(event.target.value);
+          if (!isValid) {
+            setValidationErrors({
+              ...validationErrors,
+              [cell.id]: `${cell.column.columnDef.header} обязателен`,
+            });
+          } else {
+            delete validationErrors[cell.id];
+            setValidationErrors({
+              ...validationErrors,
+            });
+          }
+        },
+      };
+    },
+    [validationErrors],
+  );
+
+  const columns = React.useMemo<MRT_ColumnDef<Organization>[]>(
+    () => [
+      {
+        accessorKey: 'name',
+        header: 'Наименование',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: 'inn',
+        header: 'ИНН',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: 'ogrn',
+        header: 'ОГРН',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: 'ogrnCreateDate',
+        header: 'Дата выдачи ОГРН',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+    ],
+    [getCommonEditTextFieldProps],
+  );
+
+  const handleCreateNewRow = (values: Organization) => {
+    tableData.push(values);
+    setTableData([...tableData]);
   };
 
-  function preventDefault(event: React.MouseEvent) {
-    event.preventDefault();
-  }
+  const handleSaveRowEdits: MaterialReactTableProps<Organization>['onEditingRowSave'] =
+    async ({ exitEditingMode, row, values }) => {
+      if (!Object.keys(validationErrors).length) {
+        tableData[row.index] = values;
+        setTableData([...tableData]); // Операция по обновлению данныхс дальнейшей перерисовкой
+        exitEditingMode(); // нужно, чтобы выйти из режима редактиртования и закрыть модальное окно
+      }
+    };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleDeleteRow = (row: MRT_Row<Organization>) => {
+    confirm({
+      title: `Вы хотите удалить строку ${row.original.id}?`,
+      confirmButtonText: 'Удалить',
+      cancelButtonText: 'Отменить',
+      onConfirm: async () => {
+        tableData.splice(row.index, 1);
+        setTableData([...tableData]);
+      }
+    });
   };
-  
+
+  const handleCancelRowEdits = () => {
+    setValidationErrors({});
+  };
+
   return (
     <>
       <Title>Список организаций</Title>
-      <StyledTable size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell sx={{ display: 'none' }}>id</TableCell>
-            <TableCell>Наименование</TableCell>
-            <TableCell>ИНН</TableCell>
-            <TableCell>ОГРН</TableCell>
-            <TableCell>Серия Дата выдачи ОГРН</TableCell>
-            <TableCell align="right">Действия</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id} onClick={() => handleNavItemClick(row.id)}>
-              <TableCell sx={{ display: 'none' }}>{row.id}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.inn}</TableCell>
-              <TableCell>{row.ogrn}</TableCell>
-              <TableCell>{moment(row.ogrnCreateDate).format('dd.mm.YYYY')}</TableCell>
-              <TableCell align="right">
-              <Tooltip title="Редактировать" sx={{ mr: 1 }}>
-                  <ModeEditIcon />
+      <TableContainer>
+        <MaterialReactTable
+          localization={MRT_Localization_RU}
+          displayColumnDefOptions={{
+            'mrt-row-actions': {
+              muiTableHeadCellProps: {
+                align: 'center',
+              },
+              size: 120,
+            },
+          }}
+          columns={columns}
+          data={tableData}
+          getRowId={(row) => row.id.toString()}
+          editingMode="modal" //default
+          enableColumnOrdering
+          enableEditing
+          onEditingRowSave={handleSaveRowEdits}
+          onEditingRowCancel={handleCancelRowEdits}
+          muiTableBodyRowProps={({ row }) => ({
+            onClick: () => {
+              setEditRow(row.original);
+              setCreateModalOpen(true);
+            },
+            sx: { cursor: 'pointer' },
+          })}
+          renderRowActions={({ row, }) => (
+            <Box sx={{ display: 'flex', gap: '1rem' }}>
+              <Tooltip arrow placement="left" title="Редактировать">
+                <IconButton onClick={() => {
+                  setEditRow(row.original);
+                  setCreateModalOpen(true);
+                }}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip arrow placement="right" title="Удалить">
+                <IconButton color="error" onClick={(event: MouseEvent) => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  handleDeleteRow(row);
+                }}>
+                  <ClearIcon />
+                </IconButton>
+              </Tooltip>
+            </Box>
+          )}
+          renderTopToolbarCustomActions={() => (
+            <Box sx={{ width: '150px' }}>
+              <Button
+                color="primary"
+                onClick={() => setCreateModalOpen(true)}
+                variant="contained"
+              >
+                <Tooltip title="Добавить">
+                  <AddIcon />
                 </Tooltip>
-                <Tooltip title="Удалить">
-                  <StyledClearIcon />
+              </Button>
+              <Button
+                sx={{ ml: '5px' }}
+                // onClickconst confirm = useConfirmDialog();={() => {}}
+                variant="outlined"
+              >
+                <Tooltip title="Обновить">
+                  <CachedIcon />
                 </Tooltip>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </StyledTable>
-      <Link color="primary" href="#" onClick={preventDefault} sx={{ mt: 3 }}>
-        Смотреть больше
-      </Link>
-
-      <EditOrganizationDialog
-        open={open}
-        onClose={handleClose}
+              </Button>
+            </Box>
+          )}
+        />
+      </TableContainer>
+      <EditRowDialog
+        columns={columns}
+        open={createModalOpen}
+        onClose={() => {
+          setCreateModalOpen(false);
+          setEditRow(null);
+        }}
+        onSubmit={handleCreateNewRow}
+        editRow={editRow}
       />
     </>
   );

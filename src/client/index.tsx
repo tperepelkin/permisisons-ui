@@ -7,13 +7,18 @@ import { InversityContextProvider } from './hooks/intensifyContextProvider';
 import { store } from './store';
 
 import './index.scss';
+import { ConfirmDialogProvider } from './components/ConfirmDialog/ConfirmDialogProvider';
 
 createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         {/* <InversityContextProvider container={container}> */}
-            <Provider store={store}>
+        <Provider store={store}>
+            {/* <ConfirmDialogProvider> */}
+            <ConfirmDialogProvider>
                 <App />
-            </Provider>
+            </ConfirmDialogProvider>
+            {/* </ConfirmDialogProvider> */}
+        </Provider>
         {/* </InversityContextProvider> */}
     </React.StrictMode>
 );
