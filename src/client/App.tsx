@@ -10,8 +10,6 @@ import { AircraftRegistry, UnmannedAircraftRegistry, PermissionsIvpRegistry, Per
 // import { mapSlice } from './store/slices/map.slice';
 
 import './App.scss';
-import UsersCard from './pages/tables/UserCard';
-import OrganizationCard from './pages/tables/OrganizationCard';
 import Dashboard from './components/Dashboard/Dashboard';
 
 interface AppProps { }

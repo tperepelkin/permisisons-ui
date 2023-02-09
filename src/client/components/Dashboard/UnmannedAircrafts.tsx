@@ -5,7 +5,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import AddIcon from '@mui/icons-material/Add';
 import CachedIcon from '@mui/icons-material/Cached';
 import MaterialReactTable, { MaterialReactTableProps, MRT_Cell, MRT_ColumnDef, MRT_Row } from 'material-react-table';
-import { aircraftSampleList, validateRequired } from './sample-data';
+import { unmannedAircraftSampleList, validateRequired } from './sample-data';
 import { MRT_Localization_RU } from 'material-react-table/locales/ru';
 import EditIcon from '@mui/icons-material/Edit';
 import { useConfirmDialog } from '../ConfirmDialog/useConfirmDialog';
@@ -13,14 +13,17 @@ import { EditRowDialog } from './EditPersonDialog';
 
 export interface UnmannedAircraft {
   id: number;
-  name: string;
+  typeName: string;
+  serialNumber: string;
   registrationNumber: string;
-  factoryNumber: string;
+  owner: string;
+  maxTakeoffWeight: number;
+  registrationDate: string | null;
 }
 
 export default function UnmannedAircrafts() {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState<UnmannedAircraft[]>(() => aircraftSampleList);
+  const [tableData, setTableData] = useState<UnmannedAircraft[]>(() => unmannedAircraftSampleList);
   const [validationErrors, setValidationErrors] = useState<{
     [cellId: string]: string;
   }>({});
@@ -56,26 +59,52 @@ export default function UnmannedAircrafts() {
   const columns = React.useMemo<MRT_ColumnDef<UnmannedAircraft>[]>(
     () => [
       {
-        accessorKey: 'name',
-        header: 'Наименование ВС',
+        accessorKey: 'typeName',
+        header: 'Тип БВС',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: 'serialNumber',
+        header: 'Серийный номер',
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
         }),
       },
       {
         accessorKey: 'registrationNumber',
-        header: 'регистрационный № ВС',
+        header: 'Учётный номер',
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
         }),
       },
       {
-        accessorKey: 'factoryNumber',
-        header: 'Заводской № ВС',
+        accessorKey: 'owner',
+        header: 'Владелец БВС',
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
         }),
       },
+      {
+        accessorKey: 'maxTakeoffWeight',
+        header: 'Максимальная взлётная масса',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: 'registrationDate',
+        header: 'Дата постановки на учёт',
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+        Cell: ({ cell }) => {
+          const value = cell.getValue()?.toString() ?? 'нет';
+          return value;
+        }
+      },
+
     ],
     [getCommonEditTextFieldProps],
   );

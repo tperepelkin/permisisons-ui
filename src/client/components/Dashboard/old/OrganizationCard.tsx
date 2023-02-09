@@ -7,11 +7,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 
 import './UserCard.scss';
 
-interface AppState {
-    panes: Array<any>;
-}
-
-const OrganizationCard = () => {
+function OrganizationCard() {
     const [date, setDate] = React.useState<Dayjs | null>(null);
 
     return (
@@ -23,7 +19,7 @@ const OrganizationCard = () => {
                             <InputLabel required htmlFor="user-lastname">Наименование организации</InputLabel>
                             <Input id="user-lastname" size="small" multiline rows={3} />
                         </FormControl>
-                        <FormControl size="small" >
+                        <FormControl size="small">
                             <InputLabel required htmlFor="user-firstname">Адрес организации</InputLabel>
                             <Input id="user-firstname" multiline rows={3} />
                         </FormControl>
@@ -55,9 +51,8 @@ const OrganizationCard = () => {
                                             value={date}
                                             onChange={(newValue) => {
                                                 setDate(newValue);
-                                            }}
-                                            renderInput={(params) => <TextField {...params} />}
-                                        />
+                                            } }
+                                            renderInput={(params) => <TextField {...params} />} />
                                     </LocalizationProvider>
                                 </FormControl>
                             </Box>
@@ -68,6 +63,6 @@ const OrganizationCard = () => {
             </Box>
         </Container>
     );
-};
+}
 
 export default OrganizationCard;

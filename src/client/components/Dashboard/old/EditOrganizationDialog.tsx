@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import OrganizationCard from '../../../pages/tables/OrganizationCard';
+import OrganizationCard from './OrganizationCard';
 
 export interface EditOrganizationDialogProps {
   open: boolean;

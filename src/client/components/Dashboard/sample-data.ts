@@ -2,6 +2,7 @@ import moment from "moment";
 import { Person } from "./Users";
 import { Organization } from "./Organizations";
 import { Aircraft } from "./Aircrafts";
+import { UnmannedAircraft } from "./UnmannedAircrafts";
 
 export function validateRequired(value: string) {
   return !!value.length;
@@ -36,6 +37,18 @@ export function createAircraft(
   factoryNumber: string,
 ): Aircraft {
   return { id, name, registrationNumber, factoryNumber, };
+}
+
+export function createUnmannedAircraft(
+  id: number,
+  typeName: string,
+  serialNumber: string,
+  registrationNumber: string,
+  owner: string,
+  maxTakeoffWeight: number,
+  registrationDate: string | null,
+): UnmannedAircraft {
+  return { id, typeName, serialNumber, registrationNumber, owner, maxTakeoffWeight, registrationDate, };
 }
 
 export const personSampleList = [
@@ -136,5 +149,36 @@ export const aircraftSampleList = [
     'Ka-52',
     'RF-32805',
     '32382611002',
+  ),
+];
+
+export const unmannedAircraftSampleList = [
+  createUnmannedAircraft(
+    0,
+    'DJI Mavic 2 Pro',
+    '163DFBS001595Z',
+    '0j30953',
+    'Василий Иванович Чапаев',
+    0.907,
+    moment('2022.12.20', 'YYYY.mm.dd').format('DD.mm.YYYY'),
+  ),
+  createUnmannedAircraft(
+    1,
+    'DJI Mavic 2 Pro',
+    '152BFBS001595Z',
+    '0j20953',
+    'Иван Иванович Иванов',
+    0.907,
+    null,
+  ),
+  createUnmannedAircraft(
+    2,
+    'DJI Mavic Air',
+    'OK3DFBS001595EV',
+    '00z30983',
+    'Ломоносов Михайло Васильевич',
+    0.43,
+    null,
+
   ),
 ];
