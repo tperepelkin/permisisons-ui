@@ -1,6 +1,6 @@
-import React, { FC, useCallback, useMemo, useState, MouseEvent } from 'react';
+import React, { useCallback, useState, MouseEvent } from 'react';
 import Title from './Title';
-import { Box, Button, styled, TableContainer, TablePagination, TableSortLabel, Toolbar, Tooltip } from '@mui/material';
+import { Box, Button, TableContainer, Tooltip } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
@@ -147,7 +147,7 @@ export default function Users() {
           columns={columns}
           data={tableData}
           getRowId={(row) => row.id.toString()}
-          editingMode="modal" //default
+          editingMode="modal"
           enableColumnOrdering
           enableEditing
           onEditingRowSave={handleSaveRowEdits}
@@ -204,6 +204,8 @@ export default function Users() {
         />
       </TableContainer>
       <EditRowDialog
+        addTitle="Зарегистрировать пользователя"
+        editTitle="Редактировать пользователя"
         columns={columns}
         open={createModalOpen}
         onClose={() => {

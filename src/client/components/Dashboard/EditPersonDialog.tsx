@@ -3,19 +3,26 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Stack, TextF
 import { MRT_ColumnDef } from 'material-react-table';
 import { Person } from './Users';
 import { Organization } from './Organizations';
+import { Aircraft } from './Aircrafts';
+import { add } from 'lodash';
+import { UnmannedAircraft } from './UnmannedAircrafts';
 
 export interface EditPersonDialogProps {
-  columns: MRT_ColumnDef<Person>[] | MRT_ColumnDef<Organization>[];
+  addTitle: string;
+  editTitle: string;
+  columns: MRT_ColumnDef<Person>[] | MRT_ColumnDef<Organization>[] | MRT_ColumnDef<Aircraft>[] | MRT_ColumnDef<UnmannedAircraft>[];
   onClose: (value: string) => void;
-  onSubmit: (values: Person | Organization) => void;
-  editRow: Person | Organization | null;
+  onSubmit: (values: Person | Organization | Aircraft) => void;
+  editRow: Person | Organization | Aircraft | UnmannedAircraft | null;
   open: boolean;
 }
 
 // Если создаём новую запись, то editRow пустая. Когда редактируем, editRow содержит данные строки
 export function EditRowDialog(props: EditPersonDialogProps) {
-  const { columns, onClose, onSubmit, editRow, open } = props;
-  const [values, setValues] = useState<Person | Organization | null>(null);
+  const { columns, onClose, onSubmit, editRow, open, addTitle, editTitle } = props;
+  const [values, setValues] = useState<Person | Organization | Aircraft | UnmannedAircraft | null>(null);
+
+  const dialogTitle = !editRow ? addTitle : editTitle;
 
   // Однократно вызываем при открытии формы. Инициализируем значения редактируемых полей
   useEffect(() => {
@@ -38,7 +45,7 @@ export function EditRowDialog(props: EditPersonDialogProps) {
         onClose(value);
       }}
     >
-      <DialogTitle textAlign="center">Зарегистрировать нового человека</DialogTitle>
+      <DialogTitle textAlign="center">{dialogTitle}</DialogTitle>
       <DialogContent>
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack

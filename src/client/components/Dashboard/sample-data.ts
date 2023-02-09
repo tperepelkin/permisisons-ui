@@ -1,8 +1,7 @@
 import moment from "moment";
 import { Person } from "./Users";
-import { useConfirmDialog } from '../ConfirmDialog/useConfirmDialog';
-import { MRT_Row } from "material-react-table";
 import { Organization } from "./Organizations";
+import { Aircraft } from "./Aircrafts";
 
 export function validateRequired(value: string) {
   return !!value.length;
@@ -20,7 +19,7 @@ function createPerson(
 }
 
 // Generate Order Data
-export function createData(
+export function createOrganization(
   id: number,
   name: string,
   inn: string,
@@ -28,6 +27,15 @@ export function createData(
   ogrnCreateDate: string
 ): Organization {
   return { id, name, inn, ogrn, ogrnCreateDate, };
+}
+
+export function createAircraft(
+  id: number,
+  name: string,
+  registrationNumber: string,
+  factoryNumber: string,
+): Aircraft {
+  return { id, name, registrationNumber, factoryNumber, };
 }
 
 export const personSampleList = [
@@ -75,25 +83,58 @@ export const personSampleList = [
 ];
 
 export const organizationSampleList = [
-  createData(
+  createOrganization(
     0,
     'АО "ФК "Зенит"',
     '7812005788',
     '1027810329095',
     moment('20.12.2002', 'YYYY.mm.dd').format('DD.mm.YYYY')
   ),
-  createData(
+  createOrganization(
     1,
     'БФ ФНБУ "Иорспасслужба"',
     '7722005788',
     '2222810329095',
     moment('20.12.2020', 'YYYY.mm.dd').format('DD.mm.YYYY')
   ),
-  createData(
+  createOrganization(
     2,
     'Войсковая часть 09436',
     '7112235788',
     '1127810329095',
     moment('20.12.1992', 'YYYY.mm.dd').format('DD.mm.YYYY')
+  ),
+];
+
+export const aircraftSampleList = [
+  createAircraft(
+    0,
+    'Ka-52',
+    'RF-32803',
+    '32382612007',
+  ),
+  createAircraft(
+    1,
+    'Ka-52',
+    'RF-90388',
+    '9827',
+  ),
+  createAircraft(
+    2,
+    'Аэростат тепловой АТ104/80ТА',
+    'RA-2472G',
+    '940415',
+  ),
+  createAircraft(
+    3,
+    'Аэростат тепловой класса АХ-8',
+    'RA-2470G',
+    'ЕСВС.03.2211',
+  ),
+  createAircraft(
+    4,
+    'Ka-52',
+    'RF-32805',
+    '32382611002',
   ),
 ];

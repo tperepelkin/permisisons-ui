@@ -58,7 +58,7 @@ export function NavBarMainList() {
                 </List>
             </Collapse>
 
-            <ListItemButton onClick={() => handleNavItemClick('aircraftRegistry')}>
+            <ListItemButton onClick={() => handleNavItemClick('aircraft')}>
                 <ListItemIcon>
                     <AirplanemodeActiveIcon />
                 </ListItemIcon>
@@ -94,7 +94,7 @@ export function NavBarMainList() {
                 </List>
             </Collapse>
 
-            <ListItemButton onClick={() => handleNavItemClick('')}>
+            <ListItemButton onClick={() => handleNavItemClick('unmanned-aircraft')}>
                 <ListItemIcon>
                     <DroneIcon />
                 </ListItemIcon>

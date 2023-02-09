@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/rootReducer';
 import EmptyDashboardContent from './EmptyDashboardContent';
 import Organizations from './Organizations';
+import Aircrafts from './Aircrafts';
+import UnmannedAircrafts from './UnmannedAircrafts';
 
 export function DashboardContent() {
   const currentNavMenuItem = useSelector((state: RootState) => state.dashboard.currentNavMenuItem);
@@ -40,9 +42,11 @@ export function DashboardContent() {
     // {/* Recent Orders */ }
     <Grid item xs={12}>
       <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-        {currentNavMenuItem==='' && <EmptyDashboardContent />}
-        {currentNavMenuItem==='user' && <Users />}
-        {currentNavMenuItem==='organization' && <Organizations />}
+        {currentNavMenuItem === '' && <EmptyDashboardContent />}
+        {currentNavMenuItem === 'user' && <Users />}
+        {currentNavMenuItem === 'organization' && <Organizations />}
+        {currentNavMenuItem === 'aircraft' && <Aircrafts />}
+        {currentNavMenuItem === 'unmanned-aircraft' && <UnmannedAircrafts />}
       </Paper>
     </Grid>
   );

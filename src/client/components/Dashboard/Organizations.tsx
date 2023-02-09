@@ -1,5 +1,4 @@
-import React, { FC, useCallback, useMemo, useState, MouseEvent } from 'react';
-import Table from '@mui/material/Table';
+import React, { useCallback, useState, MouseEvent } from 'react';
 import Title from './Title';
 import { Box, Button, IconButton, styled, TableContainer, Tooltip } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -21,7 +20,6 @@ export interface Organization {
 }
 
 export default function Organizations() {
-  const [open, setOpen] = useState(false);
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [tableData, setTableData] = useState<Organization[]>(() => organizationSampleList);
   const [validationErrors, setValidationErrors] = useState<{
@@ -99,7 +97,7 @@ export default function Organizations() {
     async ({ exitEditingMode, row, values }) => {
       if (!Object.keys(validationErrors).length) {
         tableData[row.index] = values;
-        setTableData([...tableData]); // Операция по обновлению данныхс дальнейшей перерисовкой
+        setTableData([...tableData]); // Операция по обновлению данных с дальнейшей перерисовкой
         exitEditingMode(); // нужно, чтобы выйти из режима редактиртования и закрыть модальное окно
       }
     };
@@ -137,8 +135,7 @@ export default function Organizations() {
           columns={columns}
           data={tableData}
           getRowId={(row) => row.id.toString()}
-          editingMode="modal" //default
-          enableColumnOrdering
+          editingMode="modal"
           enableEditing
           onEditingRowSave={handleSaveRowEdits}
           onEditingRowCancel={handleCancelRowEdits}
@@ -195,6 +192,8 @@ export default function Organizations() {
         />
       </TableContainer>
       <EditRowDialog
+        addTitle="Зарегистрировать организацию"
+        editTitle="Редактировать организацию"
         columns={columns}
         open={createModalOpen}
         onClose={() => {
